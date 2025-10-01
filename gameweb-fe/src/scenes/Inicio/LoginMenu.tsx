@@ -1,7 +1,8 @@
 import { useState } from "react";
-// import { useEscena } from "../../hooks/useEscena";
+import { useEscena } from "../../hooks/useEscena";
 import { Login } from "../../api/authentication";
 import { AlertError } from "./AlertError";
+import { useJugador } from "../../hooks/useJugador";
 
 export const LoginMenu = ({
   changeToRegister,
@@ -13,7 +14,9 @@ export const LoginMenu = ({
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorAlert, setErrorAlert] = useState("");
-  // const { cambiarEscena } = useEscena();
+
+  const { cambiarEscena } = useEscena();
+  const { setUsuario } = useJugador();
 
   const LogIn = async () => {
     if (username.length < 5) {
@@ -28,13 +31,14 @@ export const LoginMenu = ({
 
     setIsLoading(true);
     const response = await Login({ username, password });
+    setIsLoading(false);
     if (!response.success) {
       setErrorAlert(response.error);
       return;
     }
-    setIsLoading(false);
-
-    // cambiarEscena('');
+    setUsuario(response.usuario);
+    if(response.usuario.activeChar === null) cambiarEscena('elegirNombre');
+    else cambiarEscena('mapa')
   };
   return (
     <>

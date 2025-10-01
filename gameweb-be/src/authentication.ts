@@ -33,6 +33,7 @@ router.post("/login", async (req:Request, res:Response)=>{
         }
 
         const usuario = await traerUsuario({username, password});
+        console.log(usuario);
 
         res.status(200).json({success:true, usuario})
     }

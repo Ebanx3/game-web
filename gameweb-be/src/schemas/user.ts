@@ -27,7 +27,7 @@ const UsuarioSchema = new Schema<IUsuario>({
   },
   personajeActivo: {
     type: Schema.Types.Mixed,
-    default: {}
+    default: null
   }
 }, {
   timestamps: true

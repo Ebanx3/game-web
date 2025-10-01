@@ -37,10 +37,19 @@ export const traerUsuario = async ({
   username: string;
   password: string;
 }) => {
-  const user = await Usuario.findOne({username});
-  if(!user){
-    throw new Error("No hay usuario con el username: "+ username);
+  const user = await Usuario.findOne({ username });
+  if (!user) {
+    throw new Error("No hay usuario con el username: " + username);
   }
 
-  console.log(user)
+  const verifyPass = await bcrypt.compare(password, user.password);
+  if (!verifyPass) {
+    throw new Error("Las contraseñas no coinciden");
+  }
+
+  return {
+    email: user.email,
+    username: user.username,
+    activeChar: user.personajeActivo || null,
+  };
 };
