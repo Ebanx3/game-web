@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { useEscena } from "../../hooks/useEscena";
+// import { useEscena } from "../../hooks/useEscena";
 import { Login } from "../../api/authentication";
+import { AlertError } from "./AlertError";
 
 export const LoginMenu = ({
   changeToRegister,
@@ -12,7 +13,7 @@ export const LoginMenu = ({
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorAlert, setErrorAlert] = useState("");
-  const { cambiarEscena } = useEscena();
+  // const { cambiarEscena } = useEscena();
 
   const LogIn = async () => {
     if (username.length < 5) {
@@ -33,7 +34,7 @@ export const LoginMenu = ({
     }
     setIsLoading(false);
 
-    cambiarEscena('');
+    // cambiarEscena('');
   };
   return (
     <>
@@ -53,7 +54,7 @@ export const LoginMenu = ({
         className=" p-2 rounded bg-white/20 text-white focus:outline-none "
       />
 
-      <button className="p-3 my-4 rounded bg-blue-600 hover:bg-blue-700 transition">
+      <button className="p-3 my-4 rounded bg-blue-600 hover:bg-blue-700 transition" onClick={LogIn}>
         Ingresar
       </button>
       <button
@@ -62,6 +63,7 @@ export const LoginMenu = ({
       >
         Crear cuenta
       </button>
+      {errorAlert != "" && <AlertError message={errorAlert} setMessage={setErrorAlert}/>}
     </>
   );
 };
