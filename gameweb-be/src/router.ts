@@ -63,11 +63,11 @@ router.post("/login", async (req: Request, res: Response) => {
 });
 
 router.get(
-  "/checkCharacterName:charName",
+  "/checkCharacterName/:charName",
   async (req: Request, res: Response) => {
     try {
       const { charName } = req.params;
-      if (charName || charName.length < 5) {
+      if (!charName || charName.length < 5) {
         res.status(400).json({
           success: false,
           error: `${charName} no es un nombre de personaje valido`,

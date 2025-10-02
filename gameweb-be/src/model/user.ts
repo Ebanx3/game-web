@@ -36,7 +36,7 @@ export const fetchUser = async ({
 }) => {
   const user = await User.findOne({ username });
   if (!user) {
-    return"No se encontró un usuario con el nombre: " + username;
+    return "No se encontró un usuario con ese nombre" ;
   }
 
   const verifyPass = await bcrypt.compare(password, user.password);

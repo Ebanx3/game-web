@@ -20,7 +20,9 @@ export const ElegirNombre = () => {
     }
 
     const response = await checkCharacterName(charName);
-    if (!response.success) return;
+    if (!response.success) {
+      setErrorAlert(response.error)
+      return;}
 
     if (response.isCharNameUsed) {
       setErrorAlert("El nombre de personaje ya está en uso");

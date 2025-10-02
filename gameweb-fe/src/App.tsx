@@ -14,7 +14,7 @@ function App() {
 
       {/* Si no hay personaje activo, de haberlo salta directo al mapa*/}
       {escenaActual === "elegirNombre" && <ElegirNombre/>}
-      {escenaActual === "elegirPersonaje" && <ElegirPersonaje/>}
+      {escenaActual === "elegirPersonaje" && <ElegirPersonaje onSelect={()=>{}}/>}
 
       {escenaActual === "mapa" && <Mapa />}
      
