@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
-import texturaFondo from "../../assets/texturafondo.png";
+import texturaFondo from "../../assets/fondo2.png";
 import { AlertError } from "../Inicio/AlertError";
 import { checkCharacterName } from "../../api/creatingCharacter";
 import { useEscena } from "../../hooks/useEscena";

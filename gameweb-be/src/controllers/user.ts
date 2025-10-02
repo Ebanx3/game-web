@@ -4,10 +4,10 @@ import { checkCharacterName } from "../model/character";
 export const checkCharNameController = async (req: Request, res: Response) => {
   try {
     const { charName } = req.params;
-    if (!charName || charName.length < 5) {
+    if (!charName || charName.length < 3 || charName.length > 20) {
       res.status(400).json({
         success: false,
-        error: `${charName} no es un nombre de personaje valido`,
+        error: 'El nombre de personaje debe contener entre 3 y 20 caracteres',
       });
       return;
     }
