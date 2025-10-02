@@ -1,6 +1,6 @@
 import { Router, Request, Response } from "express";
-import { registerUser, fetchUser } from "./model/user";
-import { checkCharacterName } from "./model/character";
+import { registerUser, fetchUser } from "../model/user";
+import { checkCharacterName } from "../model/character";
 
 const router = Router();
 
@@ -84,5 +84,9 @@ router.get(
     }
   }
 );
+
+router.get("/", (_req, res) => {
+  res.send("Server active");
+});
 
 export default router;
