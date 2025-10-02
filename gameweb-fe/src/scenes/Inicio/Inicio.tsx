@@ -4,12 +4,12 @@ import NightImg from "../../assets/night.png";
 import { SpinnerSVG } from "../../assets/SpinnerSVG";
 import { LoginMenu } from "./LoginMenu";
 import { RegisterMenu } from "./RegisterMenu";
+import { AlertError } from "./AlertError";
 
 export const Inicio = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-
-  
+  const [errorAlert, setErrorAlert] = useState("");
 
   return (
     <motion.div
@@ -21,8 +21,8 @@ export const Inicio = () => {
       style={{ backgroundImage: `url(${NightImg})` }}
     >
       <div className="flex flex-col justify-between h-full py-16">
-        <h2 className="text-center text-3xl font-bold mb-6 text-amber-100 leading-16">
-          Fragmentos del fin
+        <h2 className="text-center text-6xl font-bold mb-6 text-amber-100/40 leading-16">
+          Bruma
         </h2>
         <AnimatePresence mode="wait">
           {isLogin ? (
@@ -37,7 +37,11 @@ export const Inicio = () => {
               {isLoading ? (
                 <SpinnerSVG />
               ) : (
-                <LoginMenu changeToRegister={() => setIsLogin(false)} setIsLoading={setIsLoading}/>
+                <LoginMenu
+                  changeToRegister={() => setIsLogin(false)}
+                  setIsLoading={setIsLoading}
+                  setErrorAlert={setErrorAlert}
+                />
               )}
             </motion.div>
           ) : (
@@ -52,12 +56,19 @@ export const Inicio = () => {
               {isLoading ? (
                 <SpinnerSVG />
               ) : (
-                <RegisterMenu changeToLogin={() => setIsLogin(true)} setIsLoading={setIsLoading}/>
+                <RegisterMenu
+                  changeToLogin={() => setIsLogin(true)}
+                  setIsLoading={setIsLoading}
+                  setErrorAlert={setErrorAlert}
+                />
               )}
             </motion.div>
           )}
         </AnimatePresence>
       </div>
+      {errorAlert != "" && (
+        <AlertError message={errorAlert} setMessage={setErrorAlert} />
+      )}
     </motion.div>
   );
 };

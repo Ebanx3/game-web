@@ -1,9 +1,34 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
-import texturaFondo from "../../assets/texturafondo.png"
+import texturaFondo from "../../assets/texturafondo.png";
+import { AlertError } from "../Inicio/AlertError";
+import { checkCharacterName } from "../../api/creatingCharacter";
+import { useEscena } from "../../hooks/useEscena";
 
 export const ElegirNombre = () => {
   const [charName, setCharName] = useState("");
+  const [errorAlert, setErrorAlert] = useState("");
+
+  const { cambiarEscena } = useEscena();
+
+  const confirmCharacterName = async () => {
+    if (charName.length < 3 || charName.length > 20) {
+      setErrorAlert(
+        "El nombre de usuario debe contener entre 3 y 20 caracteres"
+      );
+      return;
+    }
+
+    const response = await checkCharacterName(charName);
+    if (!response.success) return;
+
+    if (response.isCharNameUsed) {
+      setErrorAlert("El nombre de personaje ya está en uso");
+      return;
+    }
+
+    cambiarEscena("elegirPersonaje");
+  };
 
   return (
     <motion.div
@@ -21,9 +46,15 @@ export const ElegirNombre = () => {
         onChange={(e) => setCharName(e.target.value)}
         className=" p-4 rounded bg-black/30 text-white focus:outline-none "
       />
-      <button className="p-3 my-4 rounded bg-black/60 hover:bg-black/40 transition text-stone-300" onClick={()=>{}}>
+      <button
+        className="p-3 my-4 rounded bg-black/60 hover:bg-black/40 transition text-stone-300"
+        onClick={confirmCharacterName}
+      >
         Ingresar
       </button>
+      {errorAlert != "" && (
+        <AlertError message={errorAlert} setMessage={setErrorAlert} />
+      )}
     </motion.div>
   );
 };

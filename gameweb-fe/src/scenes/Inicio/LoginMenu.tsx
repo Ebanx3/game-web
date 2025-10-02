@@ -1,19 +1,19 @@
 import { useState } from "react";
 import { useEscena } from "../../hooks/useEscena";
 import { Login } from "../../api/authentication";
-import { AlertError } from "./AlertError";
 import { useJugador } from "../../hooks/useJugador";
 
 export const LoginMenu = ({
   changeToRegister,
   setIsLoading,
+  setErrorAlert
 }: {
   changeToRegister: VoidFunction;
   setIsLoading: (s: boolean) => void;
+  setErrorAlert :(s:string)=>void
 }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [errorAlert, setErrorAlert] = useState("");
 
   const { cambiarEscena } = useEscena();
   const { setUsuario } = useJugador();
@@ -31,13 +31,14 @@ export const LoginMenu = ({
 
     setIsLoading(true);
     const response = await Login({ username, password });
-    setIsLoading(false);
     if (!response.success) {
       setErrorAlert(response.error);
+      setIsLoading(false);
       return;
     }
-    setUsuario(response.usuario);
-    if(response.usuario.activeChar === null) cambiarEscena('elegirNombre');
+    
+    setUsuario(response.user);
+    if(response.user.activeChar === null) cambiarEscena('elegirNombre');
     else cambiarEscena('mapa')
   };
   return (
@@ -67,7 +68,6 @@ export const LoginMenu = ({
       >
         Crear cuenta
       </button>
-      {errorAlert != "" && <AlertError message={errorAlert} setMessage={setErrorAlert}/>}
     </>
   );
 };

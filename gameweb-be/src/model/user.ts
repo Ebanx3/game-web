@@ -1,55 +1,54 @@
-import Usuario, { IUsuario } from "../schemas/user";
+import User, { IUser } from "../schemas/user";
 import bcrypt from "bcrypt";
 
 const SALT_ROUNDS = 10;
 
-export const registrarUsuario = async (data: {
+export const registerUser = async (data: {
   email: string;
   username: string;
   password: string;
-}): Promise<IUsuario> => {
+}): Promise<IUser | string> => {
   const { email, username, password } = data;
 
-  // Verificar si el usuario ya existe
-  const existente = await Usuario.findOne({ $or: [{ email }, { username }] });
-  if (existente) {
-    throw new Error("Ya existe un usuario con ese email o nombre");
+  const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+  if (existingUser) {
+    return "Ya existe un usuario con ese nombre";
   }
 
-  // Hashear la contraseña
   const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
-  // Crear y guardar el usuario
-  const nuevoUsuario = new Usuario({
+  const newUser = new User({
     email,
     username,
     password: hashedPassword,
   });
 
-  await nuevoUsuario.save();
-  return nuevoUsuario;
+  await newUser.save();
+  return newUser;
 };
 
-export const traerUsuario = async ({
+export const fetchUser = async ({
   username,
   password,
 }: {
   username: string;
   password: string;
 }) => {
-  const user = await Usuario.findOne({ username });
+  const user = await User.findOne({ username });
   if (!user) {
-    throw new Error("No hay usuario con el username: " + username);
+    return"No se encontró un usuario con el nombre: " + username;
   }
 
   const verifyPass = await bcrypt.compare(password, user.password);
   if (!verifyPass) {
-    throw new Error("Las contraseñas no coinciden");
+    return"La constraseña no coincide";
   }
 
   return {
     email: user.email,
     username: user.username,
-    activeChar: user.personajeActivo || null,
+    activeChar: user.activeCharacter || null,
   };
 };
+
+

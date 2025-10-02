@@ -13,7 +13,6 @@ export const Login = async ({
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
     });
-    console.log(data)
     const json = await data.json();
     console.log(json)
     return json;

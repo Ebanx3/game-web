@@ -1,23 +1,23 @@
 import mongoose, { Schema, Document, Types } from 'mongoose';
 
-export interface IPersonajeMuerto extends Document {
-  nombre: string;
-  usuario: string; // Referencia al usuario original
-  fechaCreacion: Date;
-  fechaMuerte: Date;
-  enemigo: string;
-  nivel: number;
+export interface IDeadCharacter extends Document {
+  name: string;
+  user: Types.ObjectId; // Reference to the original user
+  creationDate: Date;
+  deathDate: Date;
+  enemy: string;
+  level: number;
 }
 
-const PersonajeMuertoSchema = new Schema<IPersonajeMuerto>({
-  nombre: { type: String, required: true },
-  usuario: { type: String, required: true },
-  fechaCreacion: { type: Date, required: true },
-  fechaMuerte: { type: Date, required: true },
-  enemigo: { type: String, required: true },
-  nivel: { type: Number, required: true }
+const DeadCharacterSchema = new Schema<IDeadCharacter>({
+  name: { type: String, required: true },
+  user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  creationDate: { type: Date, required: true },
+  deathDate: { type: Date, required: true },
+  enemy: { type: String, required: true },
+  level: { type: Number, required: true }
 }, {
   timestamps: true
 });
 
-export default mongoose.model<IPersonajeMuerto>('PersonajeMuerto', PersonajeMuertoSchema);
+export default mongoose.model<IDeadCharacter>('DeadCharacter', DeadCharacterSchema);
