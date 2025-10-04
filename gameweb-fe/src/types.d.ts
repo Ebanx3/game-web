@@ -2,6 +2,7 @@ type Escena =
   | "inicio"
   | "elegirNombre"
   | "elegirPersonaje"
+  | "intro"
   | "mapa"
   | "combate"
   | "gremio"

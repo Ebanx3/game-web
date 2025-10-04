@@ -1,87 +1,69 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
-import KaelImg from "../../assets/kael.png";
-import TharaImg from "../../assets/thara.png";
-import NiloImg from "../../assets/nilo.png";
-import fondo2 from "../../assets/fondo2.png";
+// CharacterSelection.tsx
+import { useState } from 'react'
+import { RACES, SEXES, type Genre } from './races'
+import CharacterPreview from './PrevistaPersonaje'
+import { motion } from 'framer-motion'
+import texturaFondo from '../../assets/fondo2.png'
+import { useEscena } from '../../hooks/useEscena'
 
-const characters = [
-  {
-    id: "kael",
-    name: "Kael",
-    image: KaelImg,
-    description: `Exiled from the crystal sanctum, Kael wanders with memories not his own.`,
-    traits: ["Teleportation", "Memory Echo", "Psychic Resistance"],
-  },
-  {
-    id: "thara",
-    name: "Thara",
-    image: TharaImg,
-    description: `Raised at the edge of worlds, Thara guards the threshold between realms.`,
-    traits: ["Spectral Wall", "Echo Strike", "Shield Bond"],
-  },
-  {
-    id: "nilo",
-    name: "Nilo",
-    image: NiloImg,
-    description: `Born of forest and spirit, Nilo seeks to restore the broken bond.`,
-    traits: ["Root Snare", "Animal Whisper", "Natural Regeneration"],
-  },
-];
+export const ElegirPersonaje = ()=> {
+  const [selectedRace, setSelectedRace] = useState<string | null>(null)
+  const [selectedSex, setSelectedSex] = useState<Genre>(null)
 
-export const ElegirPersonaje = ({
-  onSelect,
-}: {
-  onSelect: (id: string) => void;
-}) => {
-  const [selected, setSelected] = useState<string | null>(null);
+  const { cambiarEscena} = useEscena();
 
   return (
-    <motion.div
-      className="h-screen max-w-[600px] m-auto flex flex-col gap-4 items-center justify-center text-white px-4"
-      style={{ backgroundImage: `url(${fondo2})` }}
+     <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.8 }}
+      className="h-screen max-w-[600px] mx-auto bg-cover bg-center flex flex-col justify-center items-center gap-4 px-4 text-white"
+      style={{ backgroundImage: `url(${texturaFondo})` }}
     >
-      <h1 className="text-3xl mb-6 font-pixel">Choose your path</h1>
+      <h2 className="text-xl font-bold text-center">Elegí tu linaje</h2>
 
-      {characters.map((char) => (
-        <motion.div
-          key={char.id}
-          whileHover={{ scale: 1.05 }}
-          className={`border-2 rounded-lg p-4 cursor-pointer transition flex ${
-            selected === char.id ? "border-cyan-400" : "border-gray-700"
-          }`}
-          onClick={() => {
-            setSelected(char.id);
-            onSelect(char.id);
-          }}
-        >
-          <img
-            src={char.image}
-            alt={char.name}
-            className="w-full h-36 object-contain mb-2"
-          />
-          <div>
-            <h2 className="text-xl font-bold mb-1">{char.name}</h2>
-            <p className="text-sm mb-2">{char.description}</p>
-            <ul className="text-xs list-disc pl-4">
-              {char.traits.map((trait) => (
-                <li key={trait}>{trait}</li>
-              ))}
-            </ul>
+      <div className="grid grid-cols-2 gap-4 w-full max-w-sm">
+        {RACES.map((race) => (
+          <button
+            key={race.id}
+            onClick={() => setSelectedRace(race.id)}
+            className={`border rounded-lg p-2 text-center bg-white/10 ${
+              selectedRace === race.id ? 'border-yellow-500' : 'border-gray-700'
+            }`}
+          >
+            <img src={race.icon} alt={race.name} className="mx-auto size-12 object-contain" />
+            <span className="text-sm">{race.name}</span>
+          </button>
+        ))}
+      </div>
+
+      {selectedRace && (
+        <>
+          <h3 className="text-lg font-semibold">Elegí sexo</h3>
+          <div className="flex gap-4">
+            {SEXES.map((sex) => (
+              <button
+                key={sex}
+                onClick={() => setSelectedSex(sex)}
+                className={`px-4 py-2 rounded ${
+                  selectedSex === sex ? 'bg-yellow-500 text-black' : 'bg-gray-800 text-white'
+                }`}
+              >
+                {sex === 'male' ? 'Masculino' : 'Femenino'}
+              </button>
+            ))}
           </div>
-        </motion.div>
-      ))}
+        </> 
+      )}
 
-      {selected && (
-        <motion.button
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="mt-6 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 rounded font-bold"
-          onClick={() => onSelect(selected)}
-        >
-          Confirm {characters.find((c) => c.id === selected)?.name}
-        </motion.button>
+      {selectedRace && selectedSex && (
+        <>
+        <CharacterPreview race={selectedRace} sex={selectedSex} />
+        <button className=' bg-slate-800 p-2' onClick={()=> cambiarEscena('intro')}>Confirmar</button>
+        </>
+
       )}
     </motion.div>
-  );
-};
+  )
+}
